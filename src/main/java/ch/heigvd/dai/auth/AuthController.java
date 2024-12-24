@@ -40,13 +40,7 @@ public class AuthController {
   }
 
   public void profile(Context ctx) {
-    String userIdCookie = ctx.cookie("user");
-
-    if (userIdCookie == null) {
-      throw new UnauthorizedResponse();
-    }
-
-    Integer userId = Integer.parseInt(userIdCookie);
+    Integer userId = ctx.attribute(AuthMiddleware.USER_ID_KEY);
 
     if (etagService.validateResourceETag(userId, ctx.header("If-None-Match"))) {
       throw new NotModifiedResponse();

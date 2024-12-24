@@ -1,6 +1,7 @@
 package ch.heigvd.dai;
 
 import ch.heigvd.dai.auth.AuthController;
+import ch.heigvd.dai.auth.AuthMiddleware;
 import ch.heigvd.dai.users.User;
 import ch.heigvd.dai.users.UsersController;
 import ch.heigvd.dai.users.UsersETagService;
@@ -36,14 +37,12 @@ public class Main {
     // Auth routes
     app.post("/login", authController::login);
     app.post("/logout", authController::logout);
-    app.get("/profile", authController::profile);
+    app.get("/profile", AuthMiddleware.requireAuth(authController::profile));
 
     // Users routes
     app.post("/users", usersController::create);
-    app.get("/users", usersController::getMany);
-    app.get("/users/{id}", usersController::getOne);
-    app.put("/users/{id}", usersController::update);
-    app.delete("/users/{id}", usersController::delete);
+    app.put("/users", AuthMiddleware.requireAuth(usersController::update));
+    app.delete("/users", AuthMiddleware.requireAuth(usersController::delete));
 
     app.start(PORT);
   }
