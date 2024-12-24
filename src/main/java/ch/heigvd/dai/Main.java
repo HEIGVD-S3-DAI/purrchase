@@ -3,6 +3,7 @@ package ch.heigvd.dai;
 import ch.heigvd.dai.auth.AuthController;
 import ch.heigvd.dai.users.User;
 import ch.heigvd.dai.users.UsersController;
+import ch.heigvd.dai.users.UsersETagService;
 import io.javalin.Javalin;
 import java.time.LocalDateTime;
 import java.util.concurrent.ConcurrentHashMap;
@@ -25,12 +26,12 @@ public class Main {
     // This will serve as our cache
     //
     // The key is to identify the user(s)
-    // The value is the last modification time of the user(s)
-    ConcurrentHashMap<Integer, LocalDateTime> usersCache = new ConcurrentHashMap<>();
+    // The value is the etag of the user(s)
+    UsersETagService etagService = new UsersETagService(users);
 
     // Controllers
-    AuthController authController = new AuthController(users, usersCache);
-    UsersController usersController = new UsersController(users, usersCache);
+    AuthController authController = new AuthController(users, etagService);
+    UsersController usersController = new UsersController(users, etagService);
 
     // Auth routes
     app.post("/login", authController::login);
