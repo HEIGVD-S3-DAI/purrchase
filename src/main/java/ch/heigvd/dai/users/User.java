@@ -1,5 +1,7 @@
 package ch.heigvd.dai.users;
 
+import java.util.Objects;
+
 public class User {
 
   public Integer id;
@@ -10,5 +12,10 @@ public class User {
 
   public User() {
     // Empty constructor for serialisation/deserialization
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, firstName, lastName, email, password);
   }
 }
