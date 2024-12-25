@@ -16,12 +16,13 @@ public class Main {
   public static final int PORT = 8080;
 
   public static void main(String[] args) {
-    Javalin app = Javalin.create(
-        // Add custom configuration to Javalin
-        config -> {
-          // This will allow us to parse LocalDateTime
-          config.validation.register(LocalDateTime.class, LocalDateTime::parse);
-        });
+    Javalin app =
+        Javalin.create(
+            // Add custom configuration to Javalin
+            config -> {
+              // This will allow us to parse LocalDateTime
+              config.validation.register(LocalDateTime.class, LocalDateTime::parse);
+            });
 
     // This will serve as our database
     ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap<>();
