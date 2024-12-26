@@ -1,8 +1,7 @@
 package ch.heigvd.dai.users;
 
+import ch.heigvd.dai.auth.AuthMiddleware;
 import io.javalin.http.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -52,54 +51,8 @@ public class UsersController {
     ctx.json(user);
   }
 
-  public void getOne(Context ctx) {
-    Integer id = ctx.pathParamAsClass("id", Integer.class).get();
-
-    // Check the If-None-Match header
-    if (etagService.validateResourceETag(id, ctx.header("If-None-Match"))) {
-      throw new NotModifiedResponse();
-    }
-
-    // Check if the user exists
-    User user = users.get(id);
-    if (user == null) {
-      throw new NotFoundResponse();
-    }
-
-    // Add the ETag to the response header
-    ctx.header("ETag", etagService.getResourceETag(user));
-    ctx.json(user);
-  }
-
-  public void getMany(Context ctx) {
-    // Check the If-None-Match header
-    if (etagService.validateCollectionETag(ctx.header("If-None-Match"))) {
-      throw new NotModifiedResponse();
-    }
-
-    String firstName = ctx.queryParam("firstName");
-    String lastName = ctx.queryParam("lastName");
-
-    List<User> users = new ArrayList<>();
-
-    for (User user : this.users.values()) {
-      if (firstName != null && !user.firstName.equalsIgnoreCase(firstName)) {
-        continue;
-      }
-
-      if (lastName != null && !user.lastName.equalsIgnoreCase(lastName)) {
-        continue;
-      }
-
-      users.add(user);
-    }
-
-    ctx.header("ETag", etagService.getCollectionETag());
-    ctx.json(users);
-  }
-
   public void update(Context ctx) {
-    Integer id = ctx.pathParamAsClass("id", Integer.class).get();
+    Integer id = ctx.attribute(AuthMiddleware.USER_ID_KEY);
 
     // Get the client's ETag from the If-Match header
     if (!etagService.validateResourceETag(id, ctx.header("If-Match"))) {
@@ -137,7 +90,7 @@ public class UsersController {
   }
 
   public void delete(Context ctx) {
-    Integer id = ctx.pathParamAsClass("id", Integer.class).get();
+    Integer id = ctx.attribute(AuthMiddleware.USER_ID_KEY);
 
     // Get the client's ETag from the If-Match header
     if (!etagService.validateResourceETag(id, ctx.header("If-Match"))) {
