@@ -16,13 +16,12 @@ public class Main {
   public static final int PORT = 8080;
 
   public static void main(String[] args) {
-    Javalin app =
-        Javalin.create(
-            // Add custom configuration to Javalin
-            config -> {
-              // This will allow us to parse LocalDateTime
-              config.validation.register(LocalDateTime.class, LocalDateTime::parse);
-            });
+    Javalin app = Javalin.create(
+        // Add custom configuration to Javalin
+        config -> {
+          // This will allow us to parse LocalDateTime
+          config.validation.register(LocalDateTime.class, LocalDateTime::parse);
+        });
 
     // This will serve as our database
     ConcurrentHashMap<Integer, User> users = new ConcurrentHashMap<>();
@@ -53,6 +52,8 @@ public class Main {
     // Cat routes
     app.post("/cats", AuthMiddleware.requireAuth(catsController::create));
     app.put("/cats", AuthMiddleware.requireAuth(catsController::update));
+    app.get("/cats/{id}", AuthMiddleware.requireAuth(catsController::getOne));
+    app.get("/cats", AuthMiddleware.requireAuth(catsController::getMany));
     app.delete("/cats", AuthMiddleware.requireAuth(usersController::delete));
 
     app.start(PORT);
