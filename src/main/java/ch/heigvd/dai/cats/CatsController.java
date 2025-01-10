@@ -37,6 +37,7 @@ public class CatsController {
     cat.age = newCat.age;
     cat.color = newCat.color;
     cat.imageURL = newCat.imageURL;
+    cat.userId = Integer.valueOf(ctx.cookie("user"));
 
     cats.put(cat.id, cat);
 
