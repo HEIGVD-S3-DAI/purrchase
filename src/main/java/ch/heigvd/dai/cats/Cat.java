@@ -21,4 +21,12 @@ public class Cat {
   public int hashCode() {
     return Objects.hash(id, name, breed, age, color, imageURL, userId);
   }
+
+  public boolean checkParameter(String breed, String color, String age, String userId) {
+    if(breed != null && !this.breed.equals(breed)) return false;
+    if(color != null && !this.color.equals(color)) return false;
+    if(age != null && !this.age.equals(Integer.valueOf(age))) return false;
+    if(userId != null && !this.userId.equals(Integer.valueOf(userId))) return false;
+    return true;
+  }
 }

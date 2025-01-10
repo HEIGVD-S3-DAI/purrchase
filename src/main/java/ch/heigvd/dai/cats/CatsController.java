@@ -19,14 +19,15 @@ public class CatsController {
   }
 
   public void create(Context ctx) {
-    Cat newCat = ctx.bodyValidator(Cat.class)
-        .check(obj -> obj.name != null, "Missing name")
-        .check(obj -> obj.breed != null, "Missing breed")
-        .check(obj -> obj.age != null, "Missing age")
-        .check(obj -> obj.age >= 0, "Age must be positive")
-        .check(obj -> obj.color != null, "Missing color")
-        .check(obj -> obj.imageURL != null, "Missing imageURL")
-        .get();
+    Cat newCat =
+        ctx.bodyValidator(Cat.class)
+            .check(obj -> obj.name != null, "Missing name")
+            .check(obj -> obj.breed != null, "Missing breed")
+            .check(obj -> obj.age != null, "Missing age")
+            .check(obj -> obj.age >= 0, "Age must be positive")
+            .check(obj -> obj.color != null, "Missing color")
+            .check(obj -> obj.imageURL != null, "Missing imageURL")
+            .get();
 
     Cat cat = new Cat();
 
@@ -74,10 +75,21 @@ public class CatsController {
       throw new NotModifiedResponse();
     }
 
+    String breed = ctx.queryParam("breed");
+    String color = ctx.queryParam("color");
+    String age = ctx.queryParam("age");
+    String userId = ctx.queryParam("userId");
+
     List<Cat> cats = new ArrayList<>();
 
     for (Cat cat : this.cats.values()) {
-      cats.add(cat);
+      if(cat.checkParameter(breed, color, age, userId)) {
+        cats.add(cat);
+      }
+    }
+
+    if(cats.isEmpty()) {
+      throw new NotFoundResponse();
     }
 
     ctx.header("ETag", etagService.getCollectionETag());
@@ -100,14 +112,15 @@ public class CatsController {
     }
 
     // Validate and parse the updated cat from the request
-    Cat updatedCat = ctx.bodyValidator(Cat.class)
-        .check(obj -> obj.name != null, "Missing name")
-        .check(obj -> obj.breed != null, "Missing breed")
-        .check(obj -> obj.age != null, "Missing age")
-        .check(obj -> obj.age >= 0, "Age must be positive")
-        .check(obj -> obj.color != null, "Missing color")
-        .check(obj -> obj.imageURL != null, "Missing imageURL")
-        .get();
+    Cat updatedCat =
+        ctx.bodyValidator(Cat.class)
+            .check(obj -> obj.name != null, "Missing name")
+            .check(obj -> obj.breed != null, "Missing breed")
+            .check(obj -> obj.age != null, "Missing age")
+            .check(obj -> obj.age >= 0, "Age must be positive")
+            .check(obj -> obj.color != null, "Missing color")
+            .check(obj -> obj.imageURL != null, "Missing imageURL")
+            .get();
 
     // Update cat fields
     cat.name = updatedCat.name;
