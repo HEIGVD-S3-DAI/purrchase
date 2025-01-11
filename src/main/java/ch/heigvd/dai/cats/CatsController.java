@@ -71,16 +71,18 @@ public class CatsController {
   }
 
   public void getMany(Context ctx) {
-    // Check the If-None-Match header
-    if (etagService.validateCollectionETag(ctx.header("If-None-Match"))) {
-      throw new NotModifiedResponse();
-    }
 
     String breed = ctx.queryParam("breed");
     String color = ctx.queryParam("color");
     String age = ctx.queryParam("age");
     String userId = ctx.queryParam("userId");
-
+    CatFilters catFilter = new CatFilters(breed, color, age, userId);
+    String filters = catFilter.toString();
+    System.out.println("filters: " + filters);
+    // Check the If-None-Match header
+    if (etagService.validateCollectionETagWithFilter(ctx.header("If-None-Match"), filters)) {
+      throw new NotModifiedResponse();
+    }
     List<Cat> cats = new ArrayList<>();
 
     for (Cat cat : this.cats.values()) {
@@ -93,7 +95,7 @@ public class CatsController {
       throw new NotFoundResponse();
     }
 
-    ctx.header("ETag", etagService.getCollectionETag());
+    ctx.header("ETag", etagService.getCollectionETagWithFilters(filters));
     ctx.json(cats);
   }
 
