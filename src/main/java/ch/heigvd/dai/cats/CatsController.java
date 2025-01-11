@@ -84,12 +84,12 @@ public class CatsController {
     List<Cat> cats = new ArrayList<>();
 
     for (Cat cat : this.cats.values()) {
-      if(cat.checkParameter(breed, color, age, userId)) {
+      if (cat.matchesFilters(breed, color, age, userId)) {
         cats.add(cat);
       }
     }
 
-    if(cats.isEmpty()) {
+    if (cats.isEmpty()) {
       throw new NotFoundResponse();
     }
 
