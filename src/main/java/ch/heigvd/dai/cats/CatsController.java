@@ -19,14 +19,15 @@ public class CatsController {
   }
 
   public void create(Context ctx) {
-    Cat newCat = ctx.bodyValidator(Cat.class)
-        .check(obj -> obj.name != null, "Missing name")
-        .check(obj -> obj.breed != null, "Missing breed")
-        .check(obj -> obj.age != null, "Missing age")
-        .check(obj -> obj.age >= 0, "Age must be positive")
-        .check(obj -> obj.color != null, "Missing color")
-        .check(obj -> obj.imageURL != null, "Missing imageURL")
-        .get();
+    Cat newCat =
+        ctx.bodyValidator(Cat.class)
+            .check(obj -> obj.name != null, "Missing name")
+            .check(obj -> obj.breed != null, "Missing breed")
+            .check(obj -> obj.age != null, "Missing age")
+            .check(obj -> obj.age >= 0, "Age must be positive")
+            .check(obj -> obj.color != null, "Missing color")
+            .check(obj -> obj.imageURL != null, "Missing imageURL")
+            .get();
 
     Cat cat = new Cat();
 
@@ -36,6 +37,7 @@ public class CatsController {
     cat.age = newCat.age;
     cat.color = newCat.color;
     cat.imageURL = newCat.imageURL;
+    cat.userId = Integer.valueOf(ctx.cookie("user"));
 
     cats.put(cat.id, cat);
 
@@ -69,18 +71,31 @@ public class CatsController {
   }
 
   public void getMany(Context ctx) {
+
+    String breed = ctx.queryParam("breed");
+    String color = ctx.queryParam("color");
+    String age = ctx.queryParam("age");
+    String userId = ctx.queryParam("userId");
+    CatFilters catFilter = new CatFilters(breed, color, age, userId);
+    String filters = catFilter.toString();
     // Check the If-None-Match header
-    if (etagService.validateCollectionETag(ctx.header("If-None-Match"))) {
+    if (etagService.validateCollectionETagWithFilter(ctx.header("If-None-Match"), filters)) {
       throw new NotModifiedResponse();
     }
-
     List<Cat> cats = new ArrayList<>();
 
     for (Cat cat : this.cats.values()) {
-      cats.add(cat);
+      if (cat.matchesFilters(breed, color, age, userId)) {
+        cats.add(cat);
+      }
     }
 
-    ctx.header("ETag", etagService.getCollectionETag());
+    if (cats.isEmpty()) {
+      throw new NotFoundResponse();
+    }
+
+    etagService.updateCollectionETagWithFilters(filters);
+    ctx.header("ETag", etagService.getCollectionETagWithFilters(filters));
     ctx.json(cats);
   }
 
@@ -100,14 +115,15 @@ public class CatsController {
     }
 
     // Validate and parse the updated cat from the request
-    Cat updatedCat = ctx.bodyValidator(Cat.class)
-        .check(obj -> obj.name != null, "Missing name")
-        .check(obj -> obj.breed != null, "Missing breed")
-        .check(obj -> obj.age != null, "Missing age")
-        .check(obj -> obj.age >= 0, "Age must be positive")
-        .check(obj -> obj.color != null, "Missing color")
-        .check(obj -> obj.imageURL != null, "Missing imageURL")
-        .get();
+    Cat updatedCat =
+        ctx.bodyValidator(Cat.class)
+            .check(obj -> obj.name != null, "Missing name")
+            .check(obj -> obj.breed != null, "Missing breed")
+            .check(obj -> obj.age != null, "Missing age")
+            .check(obj -> obj.age >= 0, "Age must be positive")
+            .check(obj -> obj.color != null, "Missing color")
+            .check(obj -> obj.imageURL != null, "Missing imageURL")
+            .get();
 
     // Update cat fields
     cat.name = updatedCat.name;

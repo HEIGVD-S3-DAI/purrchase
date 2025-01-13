@@ -18,8 +18,16 @@ public abstract class ETagResourceService<T> {
     etagService.updateETag(getCollectionId(), resources);
   }
 
+  public void updateCollectionETagWithFilters(String filters) {
+    etagService.updateETag(getCollectionId() + filters, resources);
+  }
+
   public String getCollectionETag() {
     return etagService.getETag(getCollectionId());
+  }
+
+  public String getCollectionETagWithFilters(String filters) {
+    return etagService.getETag(getCollectionId() + filters);
   }
 
   public String getResourceETag(T resource) {
@@ -38,6 +46,10 @@ public abstract class ETagResourceService<T> {
 
   public boolean validateCollectionETag(String clientETag) {
     return etagService.validateETag(getCollectionId(), clientETag);
+  }
+
+  public boolean validateCollectionETagWithFilter(String clientETag, String filters) {
+    return etagService.validateETag(getCollectionId() + filters, clientETag);
   }
 
   protected abstract Integer getResourceId(T resource);
