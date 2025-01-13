@@ -6,6 +6,8 @@ services:
     api:
       image: ghcr.io/purrchase/purrchase
       container_name: purrchase-api
+      networks:
+        - traefik_network
       ports:
         - "8080:8080"
       labels:
