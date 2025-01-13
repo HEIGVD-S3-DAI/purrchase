@@ -13,8 +13,8 @@ services:
     container_name: purrchase-traefik
     command:
       ## Global
-      - -- global.checkNewVersion=false
-      - -- global.sendAnonymousUsage=false
+      - --global.checkNewVersion=false
+      - --global.sendAnonymousUsage=false
       # Uncomment next line when testing
       - --log.level=DEBUG
       - --api.dashboard=${TRAEFIK_ENABLE_DASHBOARD:-false}
