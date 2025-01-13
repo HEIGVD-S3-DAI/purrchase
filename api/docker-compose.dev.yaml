@@ -9,8 +9,6 @@ services:
       container_name: purrchase-api
       networks:
         - traefik_network
-      ports:
-        - "8080:8080"
       labels:
         #Traefik
         - traefik.enable=true
