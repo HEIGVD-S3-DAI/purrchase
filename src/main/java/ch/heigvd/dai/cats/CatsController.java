@@ -78,7 +78,6 @@ public class CatsController {
     String userId = ctx.queryParam("userId");
     CatFilters catFilter = new CatFilters(breed, color, age, userId);
     String filters = catFilter.toString();
-    System.out.println("filters: " + filters);
     // Check the If-None-Match header
     if (etagService.validateCollectionETagWithFilter(ctx.header("If-None-Match"), filters)) {
       throw new NotModifiedResponse();
@@ -95,6 +94,7 @@ public class CatsController {
       throw new NotFoundResponse();
     }
 
+    etagService.updateCollectionETagWithFilters(filters);
     ctx.header("ETag", etagService.getCollectionETagWithFilters(filters));
     ctx.json(cats);
   }

@@ -18,6 +18,10 @@ public abstract class ETagResourceService<T> {
     etagService.updateETag(getCollectionId(), resources);
   }
 
+  public void updateCollectionETagWithFilters(String filters) {
+    etagService.updateETag(getCollectionId() + filters, resources);
+  }
+
   public String getCollectionETag() {
     return etagService.getETag(getCollectionId());
   }
