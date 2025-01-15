@@ -94,6 +94,7 @@ The response body contains a JSON array with the following properties:
 ##### Status codes
 
 - `200` (OK) - The users have been successfully retrieved
+- `304` (Not modified) - The users are already in the cache
 
 #### Get one user
 
@@ -118,6 +119,7 @@ The response body contains a JSON object with the following properties:
 ##### Status codes
 
 - `200` (OK) - The user has been successfully retrieved
+- `304` (Not modified) - The user is already in the cache
 - `404` (Not Found) - The user does not exist
 
 #### Update a user
@@ -152,6 +154,7 @@ The response body contains a JSON object with the following properties:
 - `200` (OK) - The user has been successfully updated
 - `400` (Bad Request) - The request body is invalid
 - `404` (Not Found) - The user does not exist
+- `412` (Precondition Failed) - The user in the cache isn't up to date
 
 #### Delete a user
 
@@ -171,6 +174,7 @@ The response body is empty.
 
 - `204` (No Content) - The user has been successfully deleted
 - `404` (Not Found) - The user does not exist
+- `412` (Precondition Failed) - The user in the cache isn't up to date
 
 #### Login
 
@@ -240,8 +244,170 @@ The response body contains a JSON object with the following properties:
 
 ## Cats API
 
-TODO
+Once the user is logged in, the cat API allows to manage cats.
+
+The API is based on the CRUD pattern. It has the following operations:
+
+- Create a new cat
+- Get many cats that you can filter by breed, color, age and userId (each of these criteria is optional)
+- Get one cat by its ID
+- Update a cat
+- Delete a cat
 
 ### Endpoints
 
-TODO
+#### Create a cat
+
+- `POST /cats`
+
+Create a new cat.
+
+##### Request
+
+The request body contains a JSON object with the following properties:
+
+- `name`- The name of the cat
+- `breed` - The breed of the cat
+- `age` - The age of the cat
+- `color` - The color of the cat
+- `imageURL` - The URL corresponding to a picture of the cat
+
+##### Response
+
+The response body contains a JSON object with the following properties:
+
+- `id` - The id attributed to the cat
+- `name`- The name of the cat
+- `breed` - The breed of the cat
+- `age` - The age of the cat
+- `color` - The color of the cat
+- `imageURL` - The URL corresponding to a picture of the cat
+- `userId` - The userId of the user that added the cat
+
+##### Status codes
+
+- `201` (Created) - The cat has been successfully created
+- `400` (Bad Request) - The request body is invalid
+- `401` (Unauthorized) - The user is not logged in 
+
+#### Get many cats
+
+- `GET /cats`
+
+Get many cats.
+
+##### Request
+
+The request can contain the following optionals query parameters:
+
+- `breed` - The breed of the cat
+- `age` - The age of the cat
+- `color` - The color of the cat
+- `userId` - The userId of the user that added the cat
+
+##### Response
+
+The response body contains a JSON array with the following properties:
+
+- `id` - The id attributed to the cat
+- `name`- The name of the cat
+- `breed` - The breed of the cat
+- `age` - The age of the cat
+- `color` - The color of the cat
+- `imageURL` - The URL corresponding to a picture of the cat
+- `userId` - The userId of the user that added the cat
+
+##### Status code
+
+- `200` (OK) - The cats have been successfully retrieved
+- `304` (Not modified) - The cats are already in the cache
+- `401` (Unauthorized) - The user is not logged in
+- `404` (Not Found) - There is no cat corresponding to the selected filters
+
+#### Get one cat
+
+- `GET /cats/{id}`
+
+Get one cat by its ID.
+
+##### Request
+
+The request path must contain the ID of the cat.
+
+##### Response
+
+The response body contains a JSON object with the following properties:
+
+- `id` - The id attributed to the cat
+- `name`- The name of the cat
+- `breed` - The breed of the cat
+- `age` - The age of the cat
+- `color` - The color of the cat
+- `imageURL` - The URL corresponding to a picture of the cat
+- `userId` - The userId of the user that added the cat
+
+##### Status code
+
+- `200` (OK) - The cat has been successfully retrieved
+- `304` (Not modified) - The cat is already in the cache
+- `401` (Unauthorized) - The user is not logged in
+- `404` (Not Found) - The cat does not exist
+
+#### Update a cat
+
+- `PUT /cats/{id}`
+
+Update a cat by its ID.
+
+##### Request
+
+The request path must contain the ID of the cat.
+
+The request body must contain a JSON object with the following properties:
+
+- `name`- The name of the cat
+- `breed` - The breed of the cat
+- `age` - The age of the cat
+- `color` - The color of the cat
+- `imageURL` - The URL corresponding to a picture of the cat
+
+##### Response
+
+The response body contains a JSON object with the following properties:
+
+- `id` - The id attributed to the cat
+- `name`- The name of the cat
+- `breed` - The breed of the cat
+- `age` - The age of the cat
+- `color` - The color of the cat
+- `imageURL` - The URL corresponding to a picture of the cat
+- `userId` - The userId of the user that added the cat
+
+##### Status code
+
+- `200` (OK) - The cat has been successfully updated
+- `400` (Bad Request) - The request body is invalid
+- `401` (Unauthorized) - The user is not logged in
+- `404` (Not Found) - The cat does not exist
+- `412` (Precondition Failed) - The cat in the cache isn't up to date
+
+#### Delete a cat
+
+- `DELETE /cats/{id}`
+
+Delete a cat by its ID.
+
+##### Request
+
+The request path must contain the ID of the cat.
+
+##### Response
+
+The response body is empty.
+
+##### Status code
+
+- `204` (No Content) - The user had been successfully deleted
+- `401` (Unauthorized) - The user is not logged in
+- `404` (Not Found) - The cat does not exist
+- `412` (Precondition Failed) - The cat in the cache isn't up to date
