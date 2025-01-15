@@ -94,6 +94,7 @@ The response body contains a JSON array with the following properties:
 ##### Status codes
 
 - `200` (OK) - The users have been successfully retrieved
+- `304` (Not modified) - The users are already in the cache
 
 #### Get one user
 
@@ -118,6 +119,7 @@ The response body contains a JSON object with the following properties:
 ##### Status codes
 
 - `200` (OK) - The user has been successfully retrieved
+- `304` (Not modified) - The user is already in the cache
 - `404` (Not Found) - The user does not exist
 
 #### Update a user
@@ -152,6 +154,7 @@ The response body contains a JSON object with the following properties:
 - `200` (OK) - The user has been successfully updated
 - `400` (Bad Request) - The request body is invalid
 - `404` (Not Found) - The user does not exist
+- `412` (Precondition Failed) - The user in the cache isn't up to date
 
 #### Delete a user
 
@@ -171,6 +174,7 @@ The response body is empty.
 
 - `204` (No Content) - The user has been successfully deleted
 - `404` (Not Found) - The user does not exist
+- `412` (Precondition Failed) - The user in the cache isn't up to date
 
 #### Login
 
@@ -385,6 +389,7 @@ The response body contains a JSON object with the following properties:
 - `400` (Bad Request) - The request body is invalid
 - `401` (Unauthorized) - The user is not logged in
 - `404` (Not Found) - The cat does not exist
+- `412` (Precondition Failed) - The cat in the cache isn't up to date
 
 #### Delete a cat
 
@@ -405,3 +410,4 @@ The response body is empty.
 - `204` (No Content) - The user had been successfully deleted
 - `401` (Unauthorized) - The user is not logged in
 - `404` (Not Found) - The cat does not exist
+- `412` (Precondition Failed) - The cat in the cache isn't up to date
