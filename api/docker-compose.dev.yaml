@@ -1,0 +1,24 @@
+networks:
+  traefik_network:
+    name: traefik_network
+
+services:
+    api:
+      build:
+        context: .
+      container_name: purrchase-api
+      networks:
+        - traefik_network
+      labels:
+        #Traefik
+        - traefik.enable=true
+        - traefik.docker.network=traefik_network
+        #Middlewares
+        - traefik.http.middleware.api-stripprefix.prefixes=/api
+        #Routers
+        - traefik.http.routers.api.entrypoints=https
+        - traefik.http.routers.api.rule=PathPrefix(`/api`)
+        - traefik.http.routers.api.middleware=api-stripprefix
+        #Sticky Session
+        - traefik.http.services.api.loadbalancer.sticky=true
+        - traefik.http.services.api.loadbalancer.sticky.cookie.name=user

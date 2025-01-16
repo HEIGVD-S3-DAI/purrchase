@@ -13,8 +13,8 @@ services:
     container_name: purrchase-traefik
     command:
       ## Global
-      - -- global.checkNewVersion=false
-      - -- global.sendAnonymousUsage=false
+      - --global.checkNewVersion=false
+      - --global.sendAnonymousUsage=false
       # Uncomment next line when testing
       - --log.level=DEBUG
       - --api.dashboard=${TRAEFIK_ENABLE_DASHBOARD:-false}
@@ -64,6 +64,6 @@ services:
       - traefik.http.middlewares.basic-auth.basicauth.usersFile=/run/secrets/auth_users
       ## Routers
       - traefik.http.routers.traefik.entrypoints=https
-      - traefik.http.routers.traefik.rule=Host(`${TRAEFIK_FULLY_QUALIFIED_DOMAIN_NAME}`)
+      - traefik.http.routers.traefik.rule=PathPrefix(`/traefik`)
       - traefik.http.routers.traefik.service=api@internal
       - traefik.http.routers.traefik.middlewares=basic-auth
