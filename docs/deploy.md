@@ -217,8 +217,8 @@ Docker Compose version v2.32.4
 
 ### Install `apache2-utils`
 
-In order to create passwords for traefik, we will use the `htpasswd` utility.
-Install it with the follwing commands:
+In order to create passwords for Traefik, we will use the `htpasswd` utility.
+Install it with the following commands:
 
 ```bash
 sudo apt-get update
@@ -242,11 +242,11 @@ Click on the `Add Domain` button and choose a domain name.
 
 ### Configure Traefik
 
-For this part, navigate to the `traefik/` directory in the vm.
+For this part, navigate to the `traefik/` directory in the VM.
 
 #### Create a user
 
-First, configure the authorised users to the traefik dashboard by following
+First, configure the authorised users to the Traefik dashboard by following
 these steps:
 
 1. Create `secrets` directory:
@@ -287,7 +287,7 @@ sudo docker compose up -d
 
 ### Start the API
 
-To start the api navigate to the `api/` directory in the vm and run the
+To start the API navigate to the `api/` directory in the VM and run the
 following command:
 
 ```bash
