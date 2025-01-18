@@ -16,10 +16,12 @@
     * [Check the installation](#check-the-installation)
   * [Install `apache2-utils`](#install-apache2-utils)
 * [Deploy on the virtual machine](#deploy-on-the-virtual-machine)
-  * [Start the API](#start-the-api)
+  * [Obtain a domain name](#obtain-a-domain-name)
   * [Configure Traefik](#configure-traefik)
     * [Create a user](#create-a-user)
+    * [Setup environments variables](#setup-environments-variables)
   * [Start Traefik](#start-traefik)
+  * [Start the API](#start-the-api)
 
 <!-- mtoc-end -->
 
@@ -232,16 +234,11 @@ project to the virtual machine. For `rsync` you can use the following command.
 rsync -avz -e "ssh" . ubuntu@<vm public ip>:/home/ubuntu/purrchase
 ```
 
-### Start the API
+### Obtain a domain name
 
-To start the api navigate to the `api/` directory in the vm and run the
-following command:
+Access <http://www.duckdns.org/> and log in with your GitHub account.
 
-```bash
-sudo docker compose up -d
-```
-
-This will run the Javalin application in the background.
+Click on the `Add Domain` button and choose a domain name.
 
 ### Configure Traefik
 
@@ -261,8 +258,24 @@ these steps:
 2. Create a new user
 
    ```bash
-   htpasswd -nb <username> <password> > secrets/auth-users.txt
+   htpasswd -c secrets/auth-users.txt <username>
    ```
+
+   `htpasswd` will ask you to enter the password for the user.
+
+#### Setup environments variables
+
+Update the `.env` file with your own values:
+
+- `TRAEFIK_ACME_EMAIL`: your email address
+- `TRAEFIK_ROOT_FULLY_QUALIFIED_DOMAIN_NAME`: the root fully qualified domain
+  name to access all your services - for example, if you want to access your
+  services with the `https://whoami.my-domain-name.duckdns.org` URL, you must
+  set `TRAEFIK_ROOT_FULLY_QUALIFIED_DOMAIN_NAME=my-domain-name.duckdns.org`
+
+Update the `dns-challenge.env` file with the following environment variables:
+
+- `DUCKDNS_TOKEN`: the token to access the Duck DNS API
 
 ### Start Traefik
 
@@ -271,3 +284,14 @@ Run Traefik with the following command:
 ```bash
 sudo docker compose up -d
 ```
+
+### Start the API
+
+To start the api navigate to the `api/` directory in the vm and run the
+following command:
+
+```bash
+sudo docker compose up -d
+```
+
+This will run the Javalin application in the background.
