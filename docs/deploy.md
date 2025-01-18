@@ -22,6 +22,7 @@
     * [Setup environments variables](#setup-environments-variables)
   * [Start Traefik](#start-traefik)
   * [Start the API](#start-the-api)
+* [Summary](#summary)
 
 <!-- mtoc-end -->
 
@@ -285,6 +286,8 @@ Run Traefik with the following command:
 sudo docker compose up -d
 ```
 
+This will run the Traefik application in the background.
+
 ### Start the API
 
 To start the API navigate to the `api/` directory in the VM and run the
@@ -295,3 +298,11 @@ sudo docker compose up -d
 ```
 
 This will run the Javalin application in the background.
+
+## Summary
+
+Now you should be able to access:
+
+- The API at: `https://<your domain>/api`
+- The Traefik dashboard at: `https://<your domain>/traefik`. You can login with
+  the credentials you created earlier.
