@@ -65,6 +65,6 @@ services:
       - traefik.http.middlewares.basic-auth.basicauth.usersFile=/run/secrets/auth_users
       ## Routers
       - traefik.http.routers.traefik.entrypoints=websecure
-      - traefik.http.routers.traefik.rule=PathPrefix(`/traefik`)
+      - traefik.http.routers.traefik.rule=Host(`${TRAEFIK_ROOT_FULLY_QUALIFIED_DOMAIN_NAME}`) && PathPrefix(`/traefik`)
       - traefik.http.routers.traefik.service=api@internal
       - traefik.http.routers.traefik.middlewares=basic-auth

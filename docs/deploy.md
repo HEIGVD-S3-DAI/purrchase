@@ -294,7 +294,7 @@ To start the API navigate to the `api/` directory in the VM and run the
 following command:
 
 ```bash
-sudo docker compose up -d
+sudo docker compose --env-file=../traefik/.env up -d
 ```
 
 This will run the Javalin application in the background.

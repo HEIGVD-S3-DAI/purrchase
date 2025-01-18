@@ -7,6 +7,7 @@ services:
   api:
     image: ghcr.io/heigvd-s3-dai/purrchase:latest
     container_name: purrchase-api
+    restart: unless-stopped
     networks:
       - traefik_network
     labels:
@@ -17,7 +18,7 @@ services:
       - traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api
       #Routers
       - traefik.http.routers.api.entrypoints=websecure
-      - traefik.http.routers.api.rule=PathPrefix(`/api`)
+      - traefik.http.routers.api.rule=Host(`${TRAEFIK_ROOT_FULLY_QUALIFIED_DOMAIN_NAME}`) && PathPrefix(`/api`)
       - traefik.http.routers.api.middlewares=api-stripprefix
       #Sticky Session
       - traefik.http.services.api.loadbalancer.sticky=true
