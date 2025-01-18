@@ -1,10 +1,11 @@
 networks:
   traefik_network:
     name: traefik_network
+    external: true
 
 services:
   api:
-    image: ghcr.io/purrchase/purrchase
+    image: ghcr.io/heigvd-s3-dai/purrchase:latest
     container_name: purrchase-api
     networks:
       - traefik_network
@@ -13,12 +14,12 @@ services:
       - traefik.enable=true
       - traefik.docker.network=traefik_network
       #Middlewares
-      - traefik.http.middleware.api-stripprefix.prefixes=/api
+      - traefik.http.middlewares.api-stripprefix.stripprefix.prefixes=/api
       #Routers
-      - traefik.http.routers.api.entrypoints=https
+      - traefik.http.routers.api.entrypoints=web
       - traefik.http.routers.api.rule=PathPrefix(`/api`)
-      - traefik.http.routers.api.middleware=api-stripprefix
+      - traefik.http.routers.api.middlewares=api-stripprefix
       #Sticky Session
       - traefik.http.services.api.loadbalancer.sticky=true
-      - traefik.http.services.api.loadbalancer.sticky.cookie.name=user
-      - traefik.http.services.api.loadbalancer.sticky.cookie.httpOnly=true
+      - traefik.http.services.api.loadbalancer.sticky.cookie.name=userSession
+      # - traefik.http.services.api.loadbalancer.sticky.cookie.httpOnly=true
