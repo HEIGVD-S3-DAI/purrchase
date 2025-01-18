@@ -15,9 +15,9 @@ services:
       ## Global
       - --global.checkNewVersion=false
       - --global.sendAnonymousUsage=false
-      # Uncomment next line when testing
       - --log.level=DEBUG
-      - --api.dashboard=${TRAEFIK_ENABLE_DASHBOARD:-false}
+      - --api.dashboard=true
+      - --api.basePath=/traefik
       ## Docker
       - --providers.docker=true
       - --providers.docker.exposedbydefault=false
@@ -43,6 +43,7 @@ services:
       - --certificatesresolvers.letsencrypt.acme.dnschallenge.delayBeforeCheck=30
     restart: unless-stopped
     env_file:
+      - .env
       # We load the environment variables from the .env file for the DNS challenge
       - dns-challenge.env
     networks:
@@ -63,7 +64,7 @@ services:
       # This enables the basic-auth middleware using the Docker secret
       - traefik.http.middlewares.basic-auth.basicauth.usersFile=/run/secrets/auth_users
       ## Routers
-      - traefik.http.routers.traefik.entrypoints=https
-      - traefik.http.routers.traefik.rule=PathPrefix(`/traefik`)
+      - traefik.http.routers.traefik.entrypoints=websecure
+      - traefik.http.routers.traefik.rule=Host(`${TRAEFIK_ROOT_FULLY_QUALIFIED_DOMAIN_NAME}`) && PathPrefix(`/traefik`)
       - traefik.http.routers.traefik.service=api@internal
       - traefik.http.routers.traefik.middlewares=basic-auth
