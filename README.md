@@ -1,33 +1,57 @@
 # Purrchase
 
+<!-- mtoc-start -->
+
+* [About](#about)
+  * [Purpose](#purpose)
+* [Usage](#usage)
+* [Examples](#examples)
+  * [Create a user](#create-a-user)
+  * [Login](#login)
+  * [Profile](#profile)
+  * [Add cats](#add-cats)
+  * [Get one cat by ID](#get-one-cat-by-id)
+  * [Get many cats](#get-many-cats)
+    * [Get all gray cats](#get-all-gray-cats)
+    * [Get all cats that are maine coon](#get-all-cats-that-are-maine-coon)
+    * [Get all cats that are gray and 4 years old](#get-all-cats-that-are-gray-and-4-years-old)
+  * [Update a cat](#update-a-cat)
+  * [Delete a cat](#delete-a-cat)
+  * [Logout](#logout)
+  * [Delete a user](#delete-a-user)
+* [Development](#development)
+* [Authors](#authors)
+
+<!-- mtoc-end -->
+
 ## About
 
-Purrchase is an API allowing users to share their cats with each other.
-To learn more about the different endpoints, refer to the [API documentation](./docs/API.md).
+Purrchase is an API allowing users to share their cats with each other. To learn
+more about the different endpoints, refer to the
+[API documentation](./docs/API.md).
 
 ### Purpose
 
 The purpose of this project is to create a simple API with CRUD operations,
-authentication, session management and cache using Javalin and the HTTP protocol.
+authentication, session management and cache using Javalin and the HTTP
+protocol.
 
 ## Usage
 
-We deployed the api to the following url : https://purrchase.duckdns.org/api 
+We deployed the api to the following url : https://purrchase.duckdns.org/api
 
-You can access the treaefik dashboard to the following url : https://purrchase.duckdns.org/traefik, using
-`user: admin` and `password: admin`.
+You can access the treaefik dashboard to the following url :
+https://purrchase.duckdns.org/traefik, using `user: admin` and
+`password: admin`.
 
-If you want to run it locally or use your own url, refer to [the development section](#Development)
+If you want to run it locally or use your own url, refer to
+[the development section](#Development)
 
-## Example
+## Examples
 
-To use the API we will be using curl. To install curl, run the following command.
-```bash
-# Install curl
-sudo apt install curl
-```
+To use the API we will be using `curl`.
 
-#### Create a user
+### Create a user
 
 First we need to create a user.
 
@@ -55,9 +79,10 @@ content-length: 95
 {"id":1,"firstName":"John","lastName":"Doe","email":"john.doe@gmail.com","password":"Password"}
 ```
 
-You will need to get the userSession cookie it gives you and use it in the following requests.
+You will need to get the userSession cookie it gives you and use it in the
+following requests.
 
-#### Login
+### Login
 
 Login with the email and password you previously set.
 
@@ -82,11 +107,13 @@ expires: Thu, 01 Jan 1970 00:00:00 GMT
 set-cookie: user=1; Path=/
 ```
 
-You will need to get the user cookie it gives you and use it in the following requests.
+You will need to get the user cookie it gives you and use it in the following
+requests.
 
-#### Profile
+### Profile
 
-You can access your profile to check you are correctly logged in or see your informations.
+You can access your profile to check you are correctly logged in or see your
+informations.
 
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/profile" \
@@ -106,7 +133,7 @@ content-length: 95
 {"id":1,"firstName":"John","lastName":"Doe","email":"john.doe@gmail.com","password":"Password"}
 ```
 
-#### Add cats
+### Add cats
 
 Let's add one cat.
 
@@ -116,10 +143,10 @@ curl -i -X POST "https://purrchase.duckdns.org/api/cats" \
   -H "Accept: application/json" \
   -H "Cookie: userSession=823aac97009daea; user=1;" \
   -d '{
-        "name": "Whiskers", 
-        "breed": "Siamese", 
-        "age": 3, 
-        "color": "Gray", 
+        "name": "Whiskers",
+        "breed": "Siamese",
+        "age": 3,
+        "color": "Gray",
         "imageURL": "http://example.com/whiskers.jpg"
       }'
 ```
@@ -136,18 +163,19 @@ content-length: 123
 {"id":5,"name":"Whiskers","breed":"Siamese","age":3,"color":"Gray","imageURL":"http://example.com/whiskers.jpg","userId":1}
 ```
 
-Add a few more cat so it is interesting to filter them. For each of them the output should be similar to the first cat.
+Add a few more cat so it is interesting to filter them. For each of them the
+output should be similar to the first cat.
 
-```bash 
+```bash
 curl -i -X POST "https://purrchase.duckdns.org/api/cats" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -H "Cookie: userSession=823aac97009daea; user=1;" \
   -d '{
-        "name": "Smokey", 
-        "breed": "Maine Coon", 
-        "age": 4, 
-        "color": "Gray", 
+        "name": "Smokey",
+        "breed": "Maine Coon",
+        "age": 4,
+        "color": "Gray",
         "imageURL": "http://example.com/smokey.jpg"
       }'
 
@@ -156,18 +184,18 @@ curl -i -X POST "https://purrchase.duckdns.org/api/cats" \
   -H "Accept: application/json" \
   -H "Cookie: userSession=823aac97009daea; user=1;" \
   -d '{
-        "name": "Shadow", 
-        "breed": "Maine Coon", 
-        "age": 4, 
-        "color": "Black", 
+        "name": "Shadow",
+        "breed": "Maine Coon",
+        "age": 4,
+        "color": "Black",
         "imageURL": "http://example.com/shadow.jpg"
       }'
 ```
 
-#### Get one cat by ID
+### Get one cat by ID
 
-To get information for one cat use the following request.
-Here we use cats/5, but you can replace the 5 with the ID of the cat you want.
+To get information for one cat use the following request. Here we use cats/5,
+but you can replace the 5 with the ID of the cat you want.
 
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats/5" \
@@ -187,7 +215,8 @@ content-length: 123
 {"id":5,"name":"Whiskers","breed":"Siamese","age":3,"color":"Gray","imageURL":"http://example.com/whiskers.jpg","userId":1}
 ```
 
-Now we have an etag for requesting cat with ID = 1. If we want to request it again we can use.
+Now we have an etag for requesting cat with ID = 1. If we want to request it
+again we can use.
 
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats/5" \
@@ -206,12 +235,14 @@ date: Sun, 19 Jan 2025 17:08:31 GMT
 
 HTTP code `304` indicate that the data wasn't modified.
 
-#### Get many cats
+### Get many cats
 
-To get many cats with different filters use the following curl requests.
-If no filter is specified you will get all cats. Else you can filter by color, breed, age and userId.
+To get many cats with different filters use the following curl requests. If no
+filter is specified you will get all cats. Else you can filter by color, breed,
+age and userId.
 
-##### Get all gray cats
+#### Get all gray cats
+
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats?color=Gray" \
   -H "Accept: application/json" \
@@ -231,7 +262,7 @@ content-length: 248
 {"id":6,"name":"Smokey","breed":"Maine Coon","age":4,"color":"Gray","imageURL":"http://example.com/smokey.jpg","userId":1}]
 ```
 
-##### Get all cats that are maine coon
+#### Get all cats that are maine coon
 
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats?breed=Maine%20Coon" \
@@ -252,7 +283,7 @@ content-length: 248
 {"id":7,"name":"Shadow","breed":"Maine Coon","age":4,"color":"Black","imageURL":"http://example.com/shadow.jpg","userId":1}]
 ```
 
-##### Get all cats that are gray and 4 years old
+#### Get all cats that are gray and 4 years old
 
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats?color=Gray&age=4" \
@@ -272,7 +303,8 @@ content-length: 124
 [{"id":6,"name":"Smokey","breed":"Maine Coon","age":4,"color":"Gray","imageURL":"http://example.com/smokey.jpg","userId":1}]
 ```
 
-##### Update a cat
+### Update a cat
+
 Let's change the color of the cat with ID = 5.
 
 ```bash
@@ -281,10 +313,10 @@ curl -i -X PUT "https://purrchase.duckdns.org/api/cats/5" \
   -H "Cookie: userSession=823aac97009daea; user=1;" \
   -H "If-Match: 87d7cf57" \
   -d '{
-        "name": "Whiskers", 
-        "breed": "Siamese", 
-        "age": 3, 
-        "color": "White", 
+        "name": "Whiskers",
+        "breed": "Siamese",
+        "age": 3,
+        "color": "White",
         "imageURL": "http://example.com/whiskers.jpg"
       }'
 ```
@@ -301,9 +333,10 @@ content-length: 124
 {"id":5,"name":"Whiskers","breed":"Siamese","age":3,"color":"White","imageURL":"http://example.com/whiskers.jpg","userId":1}
 ```
 
-Now that the cat is modified, if you try to get it again with the old etag `87d7cf57`.
+Now that the cat is modified, if you try to get it again with the old etag
+`87d7cf57`.
 
-```bash 
+```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats/5" \
   -H "Accept: application/json" \
   -H "Cookie: userSession=823aac97009daea; user=1;" \
@@ -322,9 +355,10 @@ content-length: 124
 {"id":5,"name":"Whiskers","breed":"Siamese","age":3,"color":"White","imageURL":"http://example.com/whiskers.jpg","userId":1}
 ```
 
-Not receiving `304` but receiving `200` with the new data indicates that the data has changed since stored in cache.
+Not receiving `304` but receiving `200` with the new data indicates that the
+data has changed since stored in cache.
 
-##### Delete a cat
+### Delete a cat
 
 To remove a cat, here the one with ID = 5, use.
 
@@ -342,7 +376,8 @@ HTTP/2 204
 content-type: text/plain
 date: Sun, 19 Jan 2025 17:14:09 GMT
 ```
-##### Logout
+
+### Logout
 
 You can log out using the following request.
 
@@ -362,9 +397,10 @@ expires: Thu, 01 Jan 1970 00:00:00 GMT
 set-cookie: user=; Path=/; Expires=Thu, 01-Jan-1970 00:00:00 GMT; Max-Age=0
 ```
 
-##### Delete a user
+### Delete a user
 
-You need to be logged in to delete your account, so if you logged out, request this.
+You need to be logged in to delete your account, so if you logged out, request
+this.
 
 ```bash
 curl -i -X POST "https://purrchase.duckdns.org/api/login" \
@@ -393,7 +429,6 @@ HTTP/2 204
 content-type: text/plain
 date: Sun, 19 Jan 2025 17:18:08 GMT
 ```
-
 
 ## Development
 
@@ -425,7 +460,6 @@ java -jar target/java-purrchase-1.0-SNAPSHOT.jar
 ```
 
 To deploy the project refer to the [Deployment documentation](./docs/deploy.md).
-
 
 ## Authors
 
