@@ -249,7 +249,8 @@ Once the user is logged in, the cat API allows to manage cats.
 The API is based on the CRUD pattern. It has the following operations:
 
 - Create a new cat
-- Get many cats that you can filter by breed, color, age and userId (each of these criteria is optional)
+- Get many cats that you can filter by breed, color, age and userId (each of
+  these criteria is optional)
 - Get one cat by its ID
 - Update a cat
 - Delete a cat
@@ -288,7 +289,7 @@ The response body contains a JSON object with the following properties:
 
 - `201` (Created) - The cat has been successfully created
 - `400` (Bad Request) - The request body is invalid
-- `401` (Unauthorized) - The user is not logged in 
+- `401` (Unauthorized) - The user is not logged in
 
 #### Get many cats
 
@@ -388,6 +389,7 @@ The response body contains a JSON object with the following properties:
 - `200` (OK) - The cat has been successfully updated
 - `400` (Bad Request) - The request body is invalid
 - `401` (Unauthorized) - The user is not logged in
+- `403` (Forbidden) - The user is not allowed
 - `404` (Not Found) - The cat does not exist
 - `412` (Precondition Failed) - The cat in the cache isn't up to date
 
@@ -409,5 +411,7 @@ The response body is empty.
 
 - `204` (No Content) - The user had been successfully deleted
 - `401` (Unauthorized) - The user is not logged in
+- `403` (Forbidden) - The user is not allowed
 - `404` (Not Found) - The cat does not exist
 - `412` (Precondition Failed) - The cat in the cache isn't up to date
+

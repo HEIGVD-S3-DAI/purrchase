@@ -55,7 +55,7 @@ public class Main {
     app.put("/cats/{id}", AuthMiddleware.requireAuth(catsController::update));
     app.get("/cats/{id}", AuthMiddleware.requireAuth(catsController::getOne));
     app.get("/cats", AuthMiddleware.requireAuth(catsController::getMany));
-    app.delete("/cats/{id}", AuthMiddleware.requireAuth(usersController::delete));
+    app.delete("/cats/{id}", AuthMiddleware.requireAuth(catsController::delete));
 
     app.start(PORT);
   }
