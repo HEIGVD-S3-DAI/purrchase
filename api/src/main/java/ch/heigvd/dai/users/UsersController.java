@@ -5,17 +5,30 @@ import io.javalin.http.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/** Controller for handling User-related operations such as create, update, and delete. */
 public class UsersController {
   private final ConcurrentHashMap<Integer, User> users;
   private final AtomicInteger userId = new AtomicInteger(1);
-
   private final UsersETagService etagService;
 
+  /**
+   * Constructor for UsersController.
+   *
+   * @param users The collection of users managed by the controller.
+   * @param etagService The ETag service used for managing ETags for users.
+   */
   public UsersController(ConcurrentHashMap<Integer, User> users, UsersETagService etagService) {
     this.users = users;
     this.etagService = etagService;
   }
 
+  /**
+   * Creates a new user.
+   *
+   * @param ctx The Javalin context.
+   * @throws ConflictResponse If a user with the same email already exists.
+   * @throws BadRequestResponse If required fields are missing.
+   */
   public void create(Context ctx) {
     User newUser =
         ctx.bodyValidator(User.class)
@@ -32,7 +45,6 @@ public class UsersController {
     }
 
     User user = new User();
-
     user.id = userId.getAndIncrement();
     user.firstName = newUser.firstName;
     user.lastName = newUser.lastName;
@@ -41,31 +53,32 @@ public class UsersController {
 
     users.put(user.id, user);
 
-    // Generate ETag for the user and store it in the cache
     etagService.updateCollectionETag();
     ctx.header("ETag", etagService.getResourceETag(user));
-
-    // Return response
     ctx.status(HttpStatus.CREATED);
-
     ctx.json(user);
   }
 
+  /**
+   * Updates an existing user.
+   *
+   * @param ctx The Javalin context.
+   * @throws PreconditionFailedResponse If the client's ETag does not match the resource's ETag.
+   * @throws NotFoundResponse If the user does not exist.
+   * @throws BadRequestResponse If required fields are missing.
+   */
   public void update(Context ctx) {
     Integer id = ctx.attribute(AuthMiddleware.USER_ID_KEY);
 
-    // Get the client's ETag from the If-Match header
     if (!etagService.validateResourceETag(id, ctx.header("If-Match"))) {
       throw new PreconditionFailedResponse();
     }
 
-    // Check if the user exists
     User user = users.get(id);
     if (user == null) {
       throw new NotFoundResponse();
     }
 
-    // Validate and parse the updated user from the request
     User updatedUser =
         ctx.bodyValidator(User.class)
             .check(obj -> obj.firstName != null, "Missing first name")
@@ -74,30 +87,31 @@ public class UsersController {
             .check(obj -> obj.password != null, "Missing password")
             .get();
 
-    // Update user fields
     user.firstName = updatedUser.firstName;
     user.lastName = updatedUser.lastName;
     user.email = updatedUser.email;
     user.password = updatedUser.password;
 
-    // Save the updated user
     users.put(id, user);
     etagService.updateCollectionETag();
-
-    // Set the new ETag in the response header
     ctx.header("ETag", etagService.getResourceETag(user));
     ctx.json(user);
   }
 
+  /**
+   * Deletes an existing user.
+   *
+   * @param ctx The Javalin context.
+   * @throws PreconditionFailedResponse If the client's ETag does not match the resource's ETag.
+   * @throws NotFoundResponse If the user does not exist.
+   */
   public void delete(Context ctx) {
     Integer id = ctx.attribute(AuthMiddleware.USER_ID_KEY);
 
-    // Get the client's ETag from the If-Match header
     if (!etagService.validateResourceETag(id, ctx.header("If-Match"))) {
       throw new PreconditionFailedResponse();
     }
 
-    // Check if the user exists
     User user = users.get(id);
     if (user == null) {
       throw new NotFoundResponse();
