@@ -47,8 +47,8 @@ public class Main {
 
     // Users routes
     app.post("/users", usersController::create);
-    app.put("/users/{id}", AuthMiddleware.requireAuth(usersController::update));
-    app.delete("/users/{id}", AuthMiddleware.requireAuth(usersController::delete));
+    app.put("/users", AuthMiddleware.requireAuth(usersController::update));
+    app.delete("/users", AuthMiddleware.requireAuth(usersController::delete));
 
     // Cat routes
     app.post("/cats", AuthMiddleware.requireAuth(catsController::create));

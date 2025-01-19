@@ -124,9 +124,9 @@ The response body contains a JSON object with the following properties:
 
 #### Update a user
 
-- `PUT /users/{id}`
+- `PUT /users
 
-Update a user by its ID.
+Update a user by its ID, getting it from the user token.
 
 ##### Request
 
@@ -158,9 +158,9 @@ The response body contains a JSON object with the following properties:
 
 #### Delete a user
 
-- `DELETE /users/{id}`
+- `DELETE /users`
 
-Delete a user by its ID.
+Delete a user by its ID, getting it from the user token.
 
 ##### Request
 
