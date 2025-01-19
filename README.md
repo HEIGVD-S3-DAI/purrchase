@@ -4,12 +4,13 @@
 
 Purrchase is an API allowing users to share their cats with each other.
 To learn more about the different endpoints, refer to the [API documentation](./docs/API.md).
+It is deployed to https://purrchase.duckdns.org/api, and you can access the treaefik dashboard to the following url : https://purrchase.duckdns.org/traefik, using
+`user: admin` and `password: admin`.
 
 ### Purpose
 
 The purpose of this project is to create a simple API with CRUD operations,
 authentication, session management and cache using Javalin and the HTTP protocol.
-
 
 ## Usage
 
@@ -145,12 +146,12 @@ if you're deploying the project yourself change it to your own url.
 First we need to create a user.
 
 ```bash
-curl -i -X POST https://purrchase.duckdns.org/api/users \
+curl -i -X POST "https://purrchase.duckdns.org/api/users" \
   -H "Content-Type: application/json" \
   -d '{
-        "firstName": "Alice",
+        "firstName": "John",
         "lastName": "Doe",
-        "email": "alice.doe@gmail.com",
+        "email": "john.doe@gmail.com",
         "password": "Password"
       }'
 ```
@@ -160,27 +161,27 @@ You should obtain the following output.
 ```angular2html
 HTTP/2 201
 content-type: application/json
-date: Sun, 19 Jan 2025 12:39:23 GMT
-etag: 561e2679
+date: Sun, 19 Jan 2025 15:34:30 GMT
+etag: b70dde62
 set-cookie: userSession=823aac97009daea; Path=/; HttpOnly
-content-length: 97
+content-length: 95
 
-{"id":2,"firstName":"Alice","lastName":"Doe","email":"alice.doe@gmail.com","password":"Password"}
+{"id":1,"firstName":"John","lastName":"Doe","email":"john.doe@gmail.com","password":"Password"}
 ```
 
 You will need to get the userSession cookie it gives you and use it in the following requests.
 
 #### Login
 
-Login with the email and password you set.
+Login with the email and password you previously set.
 
 ```bash
-curl -i -X POST https://purrchase.duckdns.org/api/login \
+curl -i -X POST "https://purrchase.duckdns.org/api/login" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
   -H "cookie: userSession=823aac97009daea;" \
   -d '{
-        "email": "alice.doe@gmail.com",
+        "email": "john.doe@gmail.com",
         "password": "Password"
       }'
 ```
@@ -190,9 +191,9 @@ You should obtain the following output.
 ```angular2html
 HTTP/2 204
 content-type: text/plain
-date: Sun, 19 Jan 2025 12:43:23 GMT
+date: Sun, 19 Jan 2025 15:35:33 GMT
 expires: Thu, 01 Jan 1970 00:00:00 GMT
-set-cookie: user=2; Path=/
+set-cookie: user=1; Path=/
 ```
 
 You will need to get the user cookie it gives you and use it in the following requests.
@@ -202,9 +203,9 @@ You will need to get the user cookie it gives you and use it in the following re
 You can access your profile to check you are correctly logged in or see your informations.
 
 ```bash
-curl -X GET https://purrchase.duckdns.org/api/profile \
+curl -X GET "https://purrchase.duckdns.org/api/profile" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=2;"
+  -H "cookie: userSession=823aac97009daea; user=1;"
 ```
 
 You should obtain the following output.
@@ -212,11 +213,11 @@ You should obtain the following output.
 ```angular2html
 HTTP/2 200
 content-type: application/json
-date: Sun, 19 Jan 2025 12:47:28 GMT
-etag: 561e2679
-content-length: 97
+date: Sun, 19 Jan 2025 15:36:31 GMT
+etag: b70dde62
+content-length: 95
 
-{"id":2,"firstName":"Alice","lastName":"Doe","email":"alice.doe@gmail.com","password":"Password"}
+{"id":1,"firstName":"John","lastName":"Doe","email":"john.doe@gmail.com","password":"Password"}
 ```
 
 #### Add cats
@@ -224,10 +225,10 @@ content-length: 97
 Let's add one cat.
 
 ```bash
-curl -i -X POST https://purrchase.duckdns.org/api/cats \
+curl -i -X POST "https://purrchase.duckdns.org/api/cats" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=2;" \
+  -H "cookie: userSession=823aac97009daea; user=1;" \
   -d '{
         "name": "Whiskers", 
         "breed": "Siamese", 
@@ -246,16 +247,16 @@ date: Sun, 19 Jan 2025 12:49:34 GMT
 etag: b43ee254
 content-length: 123
 
-{"id":1,"name":"Whiskers","breed":"Siamese","age":3,"color":"Gray","imageURL":"http://example.com/whiskers.jpg","userId":2}
+{"id":1,"name":"Whiskers","breed":"Siamese","age":3,"color":"Gray","imageURL":"http://example.com/whiskers.jpg","userId":1}
 ```
 
 Add a few more cat so it is interesting to filter them. For each of them the output should be similar to the first cat.
 
 ```bash 
-curl -i -X POST https://purrchase.duckdns.org/api/cats \
+curl -i -X POST "https://purrchase.duckdns.org/api/cats" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=2;" \
+  -H "cookie: userSession=823aac97009daea; user=1;" \
   -d '{
         "name": "Smokey", 
         "breed": "Maine Coon", 
@@ -264,10 +265,10 @@ curl -i -X POST https://purrchase.duckdns.org/api/cats \
         "imageURL": "http://example.com/smokey.jpg"
       }'
 
-curl -i -X POST https://purrchase.duckdns.org/api/cats \
+curl -i -X POST "https://purrchase.duckdns.org/api/cats" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=2;" \
+  -H "cookie: userSession=823aac97009daea; user=1;" \
   -d '{
         "name": "Shadow", 
         "breed": "Maine Coon", 
@@ -280,12 +281,12 @@ curl -i -X POST https://purrchase.duckdns.org/api/cats \
 #### Get one cat by ID
 
 To get information for one cat use the following request.
-Here we use cats/1 but you can replace the 1 with the ID of the cat you want.
+Here we use cats/1, but you can replace the 1 with the ID of the cat you want.
 
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats/1" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=2;"
+  -H "cookie: userSession=823aac97009daea; user=1;"
 ```
 
 You should obtain the following output.
@@ -298,7 +299,7 @@ etag: b43ee254
 set-cookie: userSession=823aac97009daea; Path=/; HttpOnly
 content-length: 123
 
-{"id":1,"name":"Whiskers","breed":"Siamese","age":3,"color":"Gray","imageURL":"http://example.com/whiskers.jpg","userId":2}
+{"id":1,"name":"Whiskers","breed":"Siamese","age":3,"color":"Gray","imageURL":"http://example.com/whiskers.jpg","userId":1}
 ```
 
 Now we have an etag for requesting cat with ID = 1. If we want to request it again we can use.
@@ -306,7 +307,7 @@ Now we have an etag for requesting cat with ID = 1. If we want to request it aga
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats/1" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=2;" \
+  -H "cookie: userSession=823aac97009daea; user=1;" \
   -H "If-None-Match: b43ee254"
 ```
 
@@ -329,7 +330,7 @@ If no filter is specified you will get all cats. Else you can filter by color, b
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats?color=Gray" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=2;"
+  -H "cookie: userSession=823aac97009daea; user=1;"
 ```
 
 You should obtain the following output.
@@ -341,8 +342,8 @@ date: Sun, 19 Jan 2025 13:01:26 GMT
 etag: 1289772d
 content-length: 248
 
-[{"id":1,"name":"Whiskers","breed":"Siamese","age":3,"color":"Gray","imageURL":"http://example.com/whiskers.jpg","userId":2},
-{"id":2,"name":"Smokey","breed":"Maine Coon","age":4,"color":"Gray","imageURL":"http://example.com/smokey.jpg","userId":2}]
+[{"id":1,"name":"Whiskers","breed":"Siamese","age":3,"color":"Gray","imageURL":"http://example.com/whiskers.jpg","userId":1},
+{"id":2,"name":"Smokey","breed":"Maine Coon","age":4,"color":"Gray","imageURL":"http://example.com/smokey.jpg","userId":1}]
 ```
 
 ##### Get all cats that are maine coon
@@ -350,7 +351,7 @@ content-length: 248
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats?breed=Maine%20Coon" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=2;"
+  -H "cookie: userSession=823aac97009daea; user=1;"
 ```
 
 You should obtain the following output.
@@ -362,8 +363,8 @@ date: Sun, 19 Jan 2025 13:03:34 GMT
 etag: 1289772d
 content-length: 248
 
-[{"id":2,"name":"Smokey","breed":"Maine Coon","age":4,"color":"Gray","imageURL":"http://example.com/smokey.jpg","userId":2},
-{"id":3,"name":"Shadow","breed":"Maine Coon","age":4,"color":"Black","imageURL":"http://example.com/shadow.jpg","userId":2}]
+[{"id":2,"name":"Smokey","breed":"Maine Coon","age":4,"color":"Gray","imageURL":"http://example.com/smokey.jpg","userId":1},
+{"id":3,"name":"Shadow","breed":"Maine Coon","age":4,"color":"Black","imageURL":"http://example.com/shadow.jpg","userId":1}]
 ```
 
 ##### Get all cats that are gray and 4 years old
@@ -371,7 +372,7 @@ content-length: 248
 ```bash
     curl -i -X GET "https://purrchase.duckdns.org/api/cats?color=Gray&age=4" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=2;"
+  -H "cookie: userSession=823aac97009daea; user=1;"
 ```
 
 You should obtain the following output.
@@ -383,7 +384,7 @@ date: Sun, 19 Jan 2025 13:08:34 GMT
 etag: 1289772d
 content-length: 124
 
-[{"id":2,"name":"Smokey","breed":"Maine Coon","age":4,"color":"Gray","imageURL":"http://example.com/smokey.jpg","userId":2}]
+[{"id":2,"name":"Smokey","breed":"Maine Coon","age":4,"color":"Gray","imageURL":"http://example.com/smokey.jpg","userId":1}]
 ```
 
 ##### Update a cat
@@ -392,7 +393,7 @@ Let's change the color of the first cat.
 ```bash
     curl -i -X PUT "https://purrchase.duckdns.org/api/cats/1" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=2;" \
+  -H "cookie: userSession=823aac97009daea; user=1;" \
   -H "If-Match: b43ee254" \
   -d '{
         "name": "Whiskers", 
@@ -415,7 +416,7 @@ Now that the cat is modified, if you try to get if again with.
 ```bash 
 curl -i -X GET "https://purrchase.duckdns.org/api/cats/1" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=2;" \
+  -H "cookie: userSession=823aac97009daea; user=1;" \
   -H "If-None-Match: b43ee254"
 ```
 
@@ -432,7 +433,7 @@ To remove a cat, here the one with ID = 1, use.
 ```bash
 curl -i -X DELETE https://purrchase.duckdns.org/api/cats/1 \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=2;" \
+  -H "cookie: userSession=823aac97009daea; user=1;" \
   -H "If-Match: b43ee254"
 ```
 
@@ -450,7 +451,7 @@ You can log out using the following request.
 ```bash
 curl -i -X POST https://purrchase.duckdns.org/api/logout \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=2;"
+  -H "cookie: userSession=823aac97009daea; user=1;"
 ```
 
 You should obtain the following output.
