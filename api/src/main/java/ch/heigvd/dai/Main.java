@@ -52,10 +52,10 @@ public class Main {
 
     // Cat routes
     app.post("/cats", AuthMiddleware.requireAuth(catsController::create));
-    app.put("/cats", AuthMiddleware.requireAuth(catsController::update));
+    app.put("/cats/{id}", AuthMiddleware.requireAuth(catsController::update));
     app.get("/cats/{id}", AuthMiddleware.requireAuth(catsController::getOne));
     app.get("/cats", AuthMiddleware.requireAuth(catsController::getMany));
-    app.delete("/cats", AuthMiddleware.requireAuth(usersController::delete));
+    app.delete("/cats/{id}", AuthMiddleware.requireAuth(usersController::delete));
 
     app.start(PORT);
   }
