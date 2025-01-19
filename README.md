@@ -13,7 +13,7 @@
   * [Get one cat by ID](#get-one-cat-by-id)
   * [Get many cats](#get-many-cats)
     * [Get all gray cats](#get-all-gray-cats)
-    * [Get all cats that are maine coon](#get-all-cats-that-are-maine-coon)
+    * [Get all cats that are `maine coon`](#get-all-cats-that-are-maine-coon)
     * [Get all cats that are gray and 4 years old](#get-all-cats-that-are-gray-and-4-years-old)
   * [Update a cat](#update-a-cat)
   * [Delete a cat](#delete-a-cat)
@@ -38,10 +38,10 @@ protocol.
 
 ## Usage
 
-We deployed the api to the following url : https://purrchase.duckdns.org/api
+We deployed the API to the following url: <https://purrchase.duckdns.org/api>
 
-You can access the treaefik dashboard to the following url :
-https://purrchase.duckdns.org/traefik, using `user: admin` and
+You can access the Traefik dashboard to the following url:
+<https://purrchase.duckdns.org/traefik>, using `user: admin` and
 `password: admin`.
 
 If you want to run it locally or use your own url, refer to
@@ -79,7 +79,7 @@ content-length: 95
 {"id":1,"firstName":"John","lastName":"Doe","email":"john.doe@gmail.com","password":"Password"}
 ```
 
-You will need to get the userSession cookie it gives you and use it in the
+You will need to get the `userSession` cookie it gives you and use it in the
 following requests.
 
 ### Login
@@ -238,8 +238,8 @@ HTTP code `304` indicate that the data wasn't modified.
 ### Get many cats
 
 To get many cats with different filters use the following curl requests. If no
-filter is specified you will get all cats. Else you can filter by color, breed,
-age and userId.
+filter is specified you will get all cats. Else you can filter by `color`,
+`breed`, `age` and `userId`.
 
 #### Get all gray cats
 
@@ -262,7 +262,7 @@ content-length: 248
 {"id":6,"name":"Smokey","breed":"Maine Coon","age":4,"color":"Gray","imageURL":"http://example.com/smokey.jpg","userId":1}]
 ```
 
-#### Get all cats that are maine coon
+#### Get all cats that are `maine coon`
 
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats?breed=Maine%20Coon" \
