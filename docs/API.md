@@ -39,7 +39,7 @@ validate their information using a cookie.
 
 #### Create a new user
 
-- `POST /users`
+- `POST /api/users`
 
 Create a new user.
 
@@ -70,7 +70,7 @@ The response body contains a JSON object with the following properties:
 
 #### Get many users
 
-- `GET /users`
+- `GET /api/users`
 
 Get many users.
 
@@ -98,7 +98,7 @@ The response body contains a JSON array with the following properties:
 
 #### Get one user
 
-- `GET /users/{id}`
+- `GET /api/users/{id}`
 
 Get one user by its ID.
 
@@ -124,7 +124,7 @@ The response body contains a JSON object with the following properties:
 
 #### Update a user
 
-- `PUT /users
+- `PUT /api/users`
 
 Update a user by its ID, getting it from the user token.
 
@@ -158,7 +158,7 @@ The response body contains a JSON object with the following properties:
 
 #### Delete a user
 
-- `DELETE /users`
+- `DELETE /api/users`
 
 Delete a user by its ID, getting it from the user token.
 
@@ -259,7 +259,7 @@ The API is based on the CRUD pattern. It has the following operations:
 
 #### Create a cat
 
-- `POST /cats`
+- `POST /api/cats`
 
 Create a new cat.
 
@@ -293,7 +293,7 @@ The response body contains a JSON object with the following properties:
 
 #### Get many cats
 
-- `GET /cats`
+- `GET /api/cats`
 
 Get many cats.
 
@@ -327,7 +327,7 @@ The response body contains a JSON array with the following properties:
 
 #### Get one cat
 
-- `GET /cats/{id}`
+- `GET /api/cats/{id}`
 
 Get one cat by its ID.
 
@@ -356,7 +356,7 @@ The response body contains a JSON object with the following properties:
 
 #### Update a cat
 
-- `PUT /cats/{id}`
+- `PUT /api/cats/{id}`
 
 Update a cat by its ID.
 
@@ -395,7 +395,7 @@ The response body contains a JSON object with the following properties:
 
 #### Delete a cat
 
-- `DELETE /cats/{id}`
+- `DELETE /api/cats/{id}`
 
 Delete a cat by its ID.
 
