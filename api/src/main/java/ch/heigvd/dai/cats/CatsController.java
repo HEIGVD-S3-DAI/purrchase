@@ -62,7 +62,7 @@ public class CatsController {
     // Check if the cat exists
     Cat cat = cats.get(id);
     if (cat == null) {
-      throw new NotFoundResponse();
+      throw new NotFoundResponse("Cat not found");
     }
 
     // Add the ETag to the response header
@@ -91,7 +91,7 @@ public class CatsController {
     }
 
     if (cats.isEmpty()) {
-      throw new NotFoundResponse();
+      throw new NotFoundResponse("Cat not found");
     }
 
     etagService.updateCollectionETagWithFilters(filters);
@@ -109,9 +109,12 @@ public class CatsController {
 
     // Check if the cat exists
     Cat cat = cats.get(id);
+    if (cat == null) {
+      throw new NotFoundResponse("Cat not found");
+    }
     Integer userId = ctx.attribute(AuthMiddleware.USER_ID_KEY);
-    if (cat == null || cat.userId != userId) {
-      throw new NotFoundResponse();
+    if (cat.userId != userId) {
+      throw new ForbiddenResponse("You don't have permission to update this cat");
     }
 
     // Validate and parse the updated cat from the request
@@ -151,9 +154,12 @@ public class CatsController {
 
     // Check if the cat exists
     Cat cat = cats.get(id);
+    if (cat == null) {
+      throw new NotFoundResponse("Cat not found");
+    }
     Integer userId = ctx.attribute(AuthMiddleware.USER_ID_KEY);
-    if (cat == null || cat.userId != userId) {
-      throw new NotFoundResponse();
+    if (cat.userId != userId) {
+      throw new ForbiddenResponse("You don't have permission to delete this cat");
     }
 
     cats.remove(id);

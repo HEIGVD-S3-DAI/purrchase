@@ -414,3 +414,4 @@ The response body is empty.
 - `403` (Forbidden) - The user is not allowed
 - `404` (Not Found) - The cat does not exist
 - `412` (Precondition Failed) - The cat in the cache isn't up to date
+

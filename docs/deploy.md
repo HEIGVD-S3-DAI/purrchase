@@ -17,6 +17,7 @@
   * [Install `apache2-utils`](#install-apache2-utils)
 * [Deploy on the virtual machine](#deploy-on-the-virtual-machine)
   * [Obtain a domain name](#obtain-a-domain-name)
+  * [Configure the DNS records](#configure-the-dns-records)
   * [Configure Traefik](#configure-traefik)
     * [Create a user](#create-a-user)
     * [Setup environments variables](#setup-environments-variables)
@@ -240,6 +241,29 @@ rsync -avz -e "ssh" . ubuntu@<vm public ip>:/home/ubuntu/purrchase
 Access <http://www.duckdns.org/> and log in with your GitHub account.
 
 Click on the `Add Domain` button and choose a domain name.
+
+### Configure the DNS records
+
+Once the domain is created, update the DNS record IP address to point to the
+public IP address of the virtual machine created earlier.
+
+You can do so by adding the public IP of the VM in the `current ip` field of
+your domain and then clicking on `update ip`.
+
+> [!NOTE]
+>
+> This can take some time to propagate to the DNS servers.
+
+You now should be able to run `nslookup` on your domain and it should point to
+the public IP of the VM:
+
+```bash
+> nslookup purrchase.duckdns.org
+...
+Non-authoritative answer:
+Name:   purrchase.duckdns.org
+Address: <vm public ip>
+```
 
 ### Configure Traefik
 
