@@ -17,7 +17,8 @@ We deployed the api to the following url : https://purrchase.duckdns.org/api
 You can access the treaefik dashboard to the following url : https://purrchase.duckdns.org/traefik, using
 `user: admin` and `password: admin`.
 
-If you want to run it locally refer to [the development section](#Development)
+If you want to run it locally or use your own url, refer to [the development section](#Development)
+
 ## Example
 
 To use the API we will be using curl. To install curl, run the following command.
@@ -25,10 +26,6 @@ To use the API we will be using curl. To install curl, run the following command
 # Install curl
 sudo apt install curl
 ```
-
-We deployed the api to the following url : https://purrchase.duckdns.org/api,
-it will be used in the examples curl command below,
-if you're deploying the project yourself change it to your own url.
 
 #### Create a user
 
@@ -68,7 +65,7 @@ Login with the email and password you previously set.
 curl -i -X POST "https://purrchase.duckdns.org/api/login" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea;" \
+  -H "Cookie: userSession=823aac97009daea;" \
   -d '{
         "email": "john.doe@gmail.com",
         "password": "Password"
@@ -94,7 +91,7 @@ You can access your profile to check you are correctly logged in or see your inf
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/profile" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=1;"
+  -H "Cookie: userSession=823aac97009daea; user=1;"
 ```
 
 You should obtain the following output.
@@ -117,7 +114,7 @@ Let's add one cat.
 curl -i -X POST "https://purrchase.duckdns.org/api/cats" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=1;" \
+  -H "Cookie: userSession=823aac97009daea; user=1;" \
   -d '{
         "name": "Whiskers", 
         "breed": "Siamese", 
@@ -145,7 +142,7 @@ Add a few more cat so it is interesting to filter them. For each of them the out
 curl -i -X POST "https://purrchase.duckdns.org/api/cats" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=1;" \
+  -H "Cookie: userSession=823aac97009daea; user=1;" \
   -d '{
         "name": "Smokey", 
         "breed": "Maine Coon", 
@@ -157,7 +154,7 @@ curl -i -X POST "https://purrchase.duckdns.org/api/cats" \
 curl -i -X POST "https://purrchase.duckdns.org/api/cats" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=1;" \
+  -H "Cookie: userSession=823aac97009daea; user=1;" \
   -d '{
         "name": "Shadow", 
         "breed": "Maine Coon", 
@@ -175,7 +172,7 @@ Here we use cats/5, but you can replace the 5 with the ID of the cat you want.
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats/5" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=1;" \
+  -H "Cookie: userSession=823aac97009daea; user=1;" \
 ```
 
 You should obtain the following output.
@@ -195,7 +192,7 @@ Now we have an etag for requesting cat with ID = 1. If we want to request it aga
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats/5" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=1;" \
+  -H "Cookie: userSession=823aac97009daea; user=1;" \
   -H "If-None-Match: 87d7cf57"
 ```
 
@@ -218,7 +215,7 @@ If no filter is specified you will get all cats. Else you can filter by color, b
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats?color=Gray" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=1;"
+  -H "Cookie: userSession=823aac97009daea; user=1;"
 ```
 
 You should obtain the following output.
@@ -239,7 +236,7 @@ content-length: 248
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats?breed=Maine%20Coon" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=1;"
+  -H "Cookie: userSession=823aac97009daea; user=1;"
 ```
 
 You should obtain the following output.
@@ -258,9 +255,9 @@ content-length: 248
 ##### Get all cats that are gray and 4 years old
 
 ```bash
-    curl -i -X GET "https://purrchase.duckdns.org/api/cats?color=Gray&age=4" \
+curl -i -X GET "https://purrchase.duckdns.org/api/cats?color=Gray&age=4" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=1;"
+  -H "Cookie: userSession=823aac97009daea; user=1;"
 ```
 
 You should obtain the following output.
@@ -279,9 +276,9 @@ content-length: 124
 Let's change the color of the cat with ID = 5.
 
 ```bash
-    curl -i -X PUT "https://purrchase.duckdns.org/api/cats/5" \
+curl -i -X PUT "https://purrchase.duckdns.org/api/cats/5" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=1;" \
+  -H "Cookie: userSession=823aac97009daea; user=1;" \
   -H "If-Match: 87d7cf57" \
   -d '{
         "name": "Whiskers", 
@@ -309,7 +306,7 @@ Now that the cat is modified, if you try to get it again with the old etag `87d7
 ```bash 
 curl -i -X GET "https://purrchase.duckdns.org/api/cats/5" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=1;" \
+  -H "Cookie: userSession=823aac97009daea; user=1;" \
   -H "If-None-Match: 87d7cf57"
 ```
 
@@ -334,7 +331,7 @@ To remove a cat, here the one with ID = 5, use.
 ```bash
 curl -i -X DELETE https://purrchase.duckdns.org/api/cats/5 \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=1;" \
+  -H "Cookie: userSession=823aac97009daea; user=1;" \
   -H "If-Match: b9ef635d"
 ```
 
@@ -352,7 +349,7 @@ You can log out using the following request.
 ```bash
 curl -i -X POST https://purrchase.duckdns.org/api/logout \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=1;"
+  -H "Cookie: userSession=823aac97009daea; user=1;"
 ```
 
 You should obtain the following output.
@@ -373,7 +370,7 @@ You need to be logged in to delete your account, so if you logged out, request t
 curl -i -X POST "https://purrchase.duckdns.org/api/login" \
   -H "Content-Type: application/json" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea;" \
+  -H "Cookie: userSession=823aac97009daea;" \
   -d '{
         "email": "john.doe@gmail.com",
         "password": "Password"
@@ -385,7 +382,7 @@ You can then delete your account using the following request.
 ```bash
 curl -i -X DELETE https://purrchase.duckdns.org/api/users \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=1;" \
+  -H "Cookie: userSession=823aac97009daea; user=1;" \
   -H "If-Match: b70dde62"
 ```
 
