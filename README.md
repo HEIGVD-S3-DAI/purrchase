@@ -203,7 +203,7 @@ You will need to get the user cookie it gives you and use it in the following re
 You can access your profile to check you are correctly logged in or see your informations.
 
 ```bash
-curl -X GET "https://purrchase.duckdns.org/api/profile" \
+curl -i -X GET "https://purrchase.duckdns.org/api/profile" \
   -H "Accept: application/json" \
   -H "cookie: userSession=823aac97009daea; user=1;"
 ```
@@ -243,11 +243,11 @@ You should obtain the following output.
 ```angular2html
 HTTP/2 201
 content-type: application/json
-date: Sun, 19 Jan 2025 12:49:34 GMT
-etag: b43ee254
+date: Sun, 19 Jan 2025 17:05:22 GMT
+etag: 87d7cf57
 content-length: 123
 
-{"id":1,"name":"Whiskers","breed":"Siamese","age":3,"color":"Gray","imageURL":"http://example.com/whiskers.jpg","userId":1}
+{"id":5,"name":"Whiskers","breed":"Siamese","age":3,"color":"Gray","imageURL":"http://example.com/whiskers.jpg","userId":1}
 ```
 
 Add a few more cat so it is interesting to filter them. For each of them the output should be similar to the first cat.
@@ -281,12 +281,12 @@ curl -i -X POST "https://purrchase.duckdns.org/api/cats" \
 #### Get one cat by ID
 
 To get information for one cat use the following request.
-Here we use cats/1, but you can replace the 1 with the ID of the cat you want.
+Here we use cats/5, but you can replace the 5 with the ID of the cat you want.
 
 ```bash
-curl -i -X GET "https://purrchase.duckdns.org/api/cats/1" \
+curl -i -X GET "https://purrchase.duckdns.org/api/cats/5" \
   -H "Accept: application/json" \
-  -H "cookie: userSession=823aac97009daea; user=1;"
+  -H "cookie: userSession=823aac97009daea; user=1;" \
 ```
 
 You should obtain the following output.
@@ -294,21 +294,20 @@ You should obtain the following output.
 ```angular2html
 HTTP/2 200
 content-type: application/json
-date: Sun, 19 Jan 2025 12:54:01 GMT
-etag: b43ee254
-set-cookie: userSession=823aac97009daea; Path=/; HttpOnly
+date: Sun, 19 Jan 2025 17:07:01 GMT
+etag: 87d7cf57
 content-length: 123
 
-{"id":1,"name":"Whiskers","breed":"Siamese","age":3,"color":"Gray","imageURL":"http://example.com/whiskers.jpg","userId":1}
+{"id":5,"name":"Whiskers","breed":"Siamese","age":3,"color":"Gray","imageURL":"http://example.com/whiskers.jpg","userId":1}
 ```
 
 Now we have an etag for requesting cat with ID = 1. If we want to request it again we can use.
 
 ```bash
-curl -i -X GET "https://purrchase.duckdns.org/api/cats/1" \
+curl -i -X GET "https://purrchase.duckdns.org/api/cats/5" \
   -H "Accept: application/json" \
   -H "cookie: userSession=823aac97009daea; user=1;" \
-  -H "If-None-Match: b43ee254"
+  -H "If-None-Match: 87d7cf57"
 ```
 
 You should obtain the following output.
@@ -316,7 +315,7 @@ You should obtain the following output.
 ```angular2html
 HTTP/2 304
 content-type: application/json
-date: Sun, 19 Jan 2025 12:57:20 GMT
+date: Sun, 19 Jan 2025 17:08:31 GMT
 ```
 
 HTTP code `304` indicate that the data wasn't modified.
@@ -338,12 +337,12 @@ You should obtain the following output.
 ```angular2html
 HTTP/2 200
 content-type: application/json
-date: Sun, 19 Jan 2025 13:01:26 GMT
-etag: 1289772d
+date: Sun, 19 Jan 2025 17:09:19 GMT
+etag: 8d543e3e
 content-length: 248
 
-[{"id":1,"name":"Whiskers","breed":"Siamese","age":3,"color":"Gray","imageURL":"http://example.com/whiskers.jpg","userId":1},
-{"id":2,"name":"Smokey","breed":"Maine Coon","age":4,"color":"Gray","imageURL":"http://example.com/smokey.jpg","userId":1}]
+[{"id":5,"name":"Whiskers","breed":"Siamese","age":3,"color":"Gray","imageURL":"http://example.com/whiskers.jpg","userId":1},
+{"id":6,"name":"Smokey","breed":"Maine Coon","age":4,"color":"Gray","imageURL":"http://example.com/smokey.jpg","userId":1}]
 ```
 
 ##### Get all cats that are maine coon
@@ -359,12 +358,12 @@ You should obtain the following output.
 ```angular2html
 HTTP/2 200
 content-type: application/json
-date: Sun, 19 Jan 2025 13:03:34 GMT
-etag: 1289772d
+date: Sun, 19 Jan 2025 17:09:49 GMT
+etag: 8d543e3e
 content-length: 248
 
-[{"id":2,"name":"Smokey","breed":"Maine Coon","age":4,"color":"Gray","imageURL":"http://example.com/smokey.jpg","userId":1},
-{"id":3,"name":"Shadow","breed":"Maine Coon","age":4,"color":"Black","imageURL":"http://example.com/shadow.jpg","userId":1}]
+[{"id":6,"name":"Smokey","breed":"Maine Coon","age":4,"color":"Gray","imageURL":"http://example.com/smokey.jpg","userId":1},
+{"id":7,"name":"Shadow","breed":"Maine Coon","age":4,"color":"Black","imageURL":"http://example.com/shadow.jpg","userId":1}]
 ```
 
 ##### Get all cats that are gray and 4 years old
@@ -380,21 +379,21 @@ You should obtain the following output.
 ```angular2html
 HTTP/2 200
 content-type: application/json
-date: Sun, 19 Jan 2025 13:08:34 GMT
-etag: 1289772d
+date: Sun, 19 Jan 2025 17:10:14 GMT
+etag: 8d543e3e
 content-length: 124
 
-[{"id":2,"name":"Smokey","breed":"Maine Coon","age":4,"color":"Gray","imageURL":"http://example.com/smokey.jpg","userId":1}]
+[{"id":6,"name":"Smokey","breed":"Maine Coon","age":4,"color":"Gray","imageURL":"http://example.com/smokey.jpg","userId":1}]
 ```
 
 ##### Update a cat
-Let's change the color of the first cat.
+Let's change the color of the cat with ID = 5.
 
 ```bash
-    curl -i -X PUT "https://purrchase.duckdns.org/api/cats/1" \
+    curl -i -X PUT "https://purrchase.duckdns.org/api/cats/5" \
   -H "Accept: application/json" \
   -H "cookie: userSession=823aac97009daea; user=1;" \
-  -H "If-Match: b43ee254" \
+  -H "If-Match: 87d7cf57" \
   -d '{
         "name": "Whiskers", 
         "breed": "Siamese", 
@@ -403,46 +402,59 @@ Let's change the color of the first cat.
         "imageURL": "http://example.com/whiskers.jpg"
       }'
 ```
-NOT WORKING ???????
 
 You should obtain the following output.
 
 ```angular2html
-todo
+HTTP/2 200
+content-type: application/json
+date: Sun, 19 Jan 2025 17:11:20 GMT
+etag: b9ef635d
+content-length: 124
+
+{"id":5,"name":"Whiskers","breed":"Siamese","age":3,"color":"White","imageURL":"http://example.com/whiskers.jpg","userId":1}
 ```
 
-Now that the cat is modified, if you try to get if again with.
+Now that the cat is modified, if you try to get it again with the old etag `87d7cf57`.
 
 ```bash 
-curl -i -X GET "https://purrchase.duckdns.org/api/cats/1" \
+curl -i -X GET "https://purrchase.duckdns.org/api/cats/5" \
   -H "Accept: application/json" \
   -H "cookie: userSession=823aac97009daea; user=1;" \
-  -H "If-None-Match: b43ee254"
+  -H "If-None-Match: 87d7cf57"
 ```
 
 You should obtain the following output.
 
 ```angular2html
-todo
+HTTP/2 200
+content-type: application/json
+date: Sun, 19 Jan 2025 17:12:05 GMT
+etag: b9ef635d
+content-length: 124
+
+{"id":5,"name":"Whiskers","breed":"Siamese","age":3,"color":"White","imageURL":"http://example.com/whiskers.jpg","userId":1}
 ```
+
+Not receiving `304` but receiving `200` with the new data indicates that the data has changed since stored in cache.
 
 ##### Delete a cat
 
-To remove a cat, here the one with ID = 1, use.
+To remove a cat, here the one with ID = 5, use.
 
 ```bash
-curl -i -X DELETE https://purrchase.duckdns.org/api/cats/1 \
+curl -i -X DELETE https://purrchase.duckdns.org/api/cats/5 \
   -H "Accept: application/json" \
   -H "cookie: userSession=823aac97009daea; user=1;" \
-  -H "If-Match: b43ee254"
+  -H "If-Match: b9ef635d"
 ```
-
-NOT WORKING ???????
 
 You should obtain the following output.
 
 ```angular2html
-todo
+HTTP/2 204
+content-type: text/plain
+date: Sun, 19 Jan 2025 17:14:09 GMT
 ```
 ##### Logout
 
@@ -459,27 +471,43 @@ You should obtain the following output.
 ```angular2html
 HTTP/2 204
 content-type: text/plain
-date: Sun, 19 Jan 2025 13:24:53 GMT
+date: Sun, 19 Jan 2025 17:14:34 GMT
 expires: Thu, 01 Jan 1970 00:00:00 GMT
 set-cookie: user=; Path=/; Expires=Thu, 01-Jan-1970 00:00:00 GMT; Max-Age=0
 ```
 
 ##### Delete a user
 
-You can delete a user using the following request.
+You need to be logged in to delete your account, so if you logged out, request this.
 
 ```bash
-curl -i -X DELETE https://purrchase.duckdns.org/api/users/2 \
-  -H "Accept: application/json"
+curl -i -X POST "https://purrchase.duckdns.org/api/login" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -H "cookie: userSession=823aac97009daea;" \
+  -d '{
+        "email": "john.doe@gmail.com",
+        "password": "Password"
+      }'
 ```
 
-??? NOT WORKING
+You can then delete your account using the following request.
+
+```bash
+curl -i -X DELETE https://purrchase.duckdns.org/api/users \
+  -H "Accept: application/json" \
+  -H "cookie: userSession=823aac97009daea; user=1;" \
+  -H "If-Match: b70dde62"
+```
 
 You should obtain the following output.
 
 ```angular2html
-todo
+HTTP/2 204
+content-type: text/plain
+date: Sun, 19 Jan 2025 17:18:08 GMT
 ```
+
 ## Authors
 
 - Leonard Cseres [@leoanrdcser](https://github.com/leonardcser)
