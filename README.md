@@ -204,7 +204,7 @@ but you can replace the 5 with the ID of the cat you want.
 ```bash
 curl -i -X GET "https://purrchase.duckdns.org/api/cats/5" \
   -H "Accept: application/json" \
-  -H "Cookie: userSession=823aac97009daea; user=1;" \
+  -H "Cookie: userSession=823aac97009daea; user=1;"
 ```
 
 You should obtain the following output.
